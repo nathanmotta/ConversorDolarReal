@@ -72,3 +72,52 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = ConversorDolarReal(root)
     root.mainloop()
+
+
+
+
+#Versão do programa com API
+
+
+import requests
+
+def obter_cotacao_atual():
+    """
+    Obtém a cotação atual do dólar em tempo real usando uma API
+    """
+    try:
+        url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
+        response = requests.get(url)
+        data = response.json()
+        
+        cotacao = float(data['USDBRL']['bid'])
+        return cotacao
+    
+    except Exception as e:
+        print(f"Erro ao obter cotação: {e}")
+        return 5.50  # Valor padrão em caso de erro
+
+def converter_dolar_para_real():
+    """
+    Converte dólar para real usando cotação em tempo real
+    """
+    print("=== Conversor de Dólar para Real ===")
+    
+    # Obter cotação atual
+    cotacao = obter_cotacao_atual()
+    print(f"Cotação atual: R$ {cotacao:.2f}")
+    
+    try:
+        valor_dolar = float(input("\nDigite o valor em dólar (USD): $"))
+        valor_real = valor_dolar * cotacao
+        
+        print(f"\nResultado:")
+        print(f"${valor_dolar:.2f} dólares = R${valor_real:.2f} reais")
+        print(f"Taxa de câmbio: R$ {cotacao:.2f}")
+    
+    except ValueError:
+        print("Por favor, digite um valor numérico válido.")
+
+# Executar o programa
+if __name__ == "__main__":
+    converter_dolar_para_real()
